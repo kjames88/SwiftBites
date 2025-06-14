@@ -270,6 +270,15 @@ struct RecipeForm: View {
         dismiss()
     }
     
+    // Debugging function to check the database and confirm child array [RecipeIngredient] was deleted with Recipe
+    func printRecipeIngredientsCount(prefix: String = "") {
+        let descriptor = FetchDescriptor<RecipeIngredient>()
+        let fetchResult = try? context.fetch(descriptor)
+        if let ingredients = fetchResult {
+            print("\(prefix) Found \(ingredients.count) recipe ingredients")
+        }
+    }
+
     func deleteIngredients(offsets: IndexSet) {
         withAnimation {
             ingredients.remove(atOffsets: offsets)

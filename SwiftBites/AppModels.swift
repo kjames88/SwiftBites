@@ -45,7 +45,10 @@ final class Recipe: Identifiable {
     
     var serving: Int
     var time: Int
+
+    @Relationship(deleteRule: .cascade)
     var ingredients: [RecipeIngredient]
+
     var instructions: String
     var imageData: Data?
     
