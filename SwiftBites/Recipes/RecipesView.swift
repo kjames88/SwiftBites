@@ -4,6 +4,7 @@ import SwiftData
 struct RecipesView: View {
     @State private var query = ""
     @State private var sortOrder = SortDescriptor(\Recipe.name)
+    @Environment(\.modelContext) var context
     
     @Query private var recipes: [Recipe]
     
@@ -61,13 +62,20 @@ struct RecipesView: View {
         if recipes.isEmpty {
             empty
         } else {
-            list(for: recipes.filter {
-                if query.isEmpty {
-                    return true
-                } else {
-                    return $0.name.localizedStandardContains(query) || $0.summary.localizedStandardContains(query)
-                }
-            }.sorted(using: sortOrder))
+            list(for: filteredRecipes.sorted(using: sortOrder))
+        }
+    }
+    
+    var filteredRecipes: [Recipe] {
+        let predicate = #Predicate<Recipe> {
+            $0.name.localizedStandardContains(query)
+        }
+        let descriptor = FetchDescriptor(predicate: query.isEmpty ? nil : predicate)
+        do {
+            let filteredRecipes = try context.fetch(descriptor)
+            return filteredRecipes
+        } catch {
+            return []
         }
     }
     

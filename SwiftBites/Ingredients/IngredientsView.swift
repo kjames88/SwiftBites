@@ -34,6 +34,19 @@ struct IngredientsView: View {
         }
     }
     
+    var filteredIngredients: [Ingredient] {
+        let predicate = #Predicate<Ingredient> {
+            $0.name.localizedStandardContains(query)
+        }
+        let descriptor = FetchDescriptor(predicate: query.isEmpty ? nil : predicate)
+        do {
+            let filteredIngredients = try context.fetch(descriptor)
+            return filteredIngredients
+        } catch {
+            return []
+        }
+    }
+    
     // MARK: - Views
     
     @ViewBuilder
@@ -41,13 +54,7 @@ struct IngredientsView: View {
         if ingredients.isEmpty {
             empty
         } else {
-            list(for: ingredients.filter {
-                if query.isEmpty {
-                    return true
-                } else {
-                    return $0.name.localizedStandardContains(query)
-                }
-            })
+            list(for: filteredIngredients)
         }
     }
     
