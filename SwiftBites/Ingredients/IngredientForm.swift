@@ -26,7 +26,6 @@ struct IngredientForm: View {
     @State private var name: String
     @State private var inPantry: Bool = false
     @State private var error: Error?
-    //@Environment(\.storage) private var storage
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isNameFocused: Bool
     
@@ -71,7 +70,6 @@ struct IngredientForm: View {
     // MARK: - Data
     
     private func delete(ingredient: Ingredient) {
-        //storage.deleteIngredient(id: ingredient.id)
         context.delete(ingredient)
         dismiss()
     }
@@ -79,10 +77,8 @@ struct IngredientForm: View {
     private func save() {
         switch mode {
         case .add:
-            //try storage.addIngredient(name: name)
             context.insert(Ingredient(name: name, isInPantry: inPantry))
         case .edit(let ingredient):
-            //try storage.updateIngredient(id: ingredient.id, name: name)
             ingredient.name = name
             ingredient.isInPantry = inPantry
         }
