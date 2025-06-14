@@ -10,9 +10,9 @@ struct RecipeForm: View {
     }
     
     var mode: Mode
-    @Environment (\.modelContext) var context
+    @Environment(\.modelContext) var context
     
-    init(mode: Mode) {
+    init(mode: Mode, categoryId: UUID? = nil) {
         self.mode = mode
         switch mode {
         case .add:
@@ -23,6 +23,7 @@ struct RecipeForm: View {
             _time = .init(initialValue: 5)
             _instructions = .init(initialValue: "")
             _ingredients = .init(initialValue: [])
+            _categoryId = .init(initialValue: categoryId)
         case .edit(let recipe):
             title = "Edit \(recipe.name)"
             _name = .init(initialValue: recipe.name)
@@ -73,6 +74,11 @@ struct RecipeForm: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save", action: save)
                     .disabled(name.isEmpty || instructions.isEmpty)
+            }
+            ToolbarItem() {
+                NavigationLink(destination: ShoppingView(ingredients: ingredients)) {
+                    Label("Shopping List", systemImage: "cart")
+                }
             }
         }
         .onChange(of: imageItem) { _, _ in
@@ -275,33 +281,29 @@ struct RecipeForm: View {
         let categories = try? context.fetch(descriptor)
         let category = categories?.first(where: { $0.id == categoryId })
         
-        do {
-            switch mode {
-            case .add:
-                context.insert(
-                    Recipe(
-                        name: name,
-                        summary: summary,
-                        category: category,
-                        serving: serving,
-                        time: time,
-                        ingredients: ingredients,
-                        instructions: instructions,
-                        imageData: imageData
-                    ))
-            case .edit(let recipe):
-                recipe.name = name
-                recipe.summary = summary
-                recipe.category = category
-                recipe.serving = serving
-                recipe.time = time
-                recipe.ingredients = ingredients
-                recipe.instructions = instructions
-                recipe.imageData = imageData
-            }
-            dismiss()
-        } catch {
-            self.error = error
+        switch mode {
+        case .add:
+            context.insert(
+                Recipe(
+                    name: name,
+                    summary: summary,
+                    category: category,
+                    serving: serving,
+                    time: time,
+                    ingredients: ingredients,
+                    instructions: instructions,
+                    imageData: imageData
+                ))
+        case .edit(let recipe):
+            recipe.name = name
+            recipe.summary = summary
+            recipe.category = category
+            recipe.serving = serving
+            recipe.time = time
+            recipe.ingredients = ingredients
+            recipe.instructions = instructions
+            recipe.imageData = imageData
         }
+        dismiss()
     }
 }

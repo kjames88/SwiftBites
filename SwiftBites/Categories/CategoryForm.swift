@@ -74,18 +74,14 @@ struct CategoryForm: View {
     }
     
     private func save() {
-        do {
-            switch mode {
-            case .add:
-                context.insert(Category (name: name))
-            case .edit(let category):
-                print("update category (name \(name))")
-                category.name = name
-                // FIXME: necessary to context.save()?
-            }
-            dismiss()
-        } catch {
-            self.error = error
+        switch mode {
+        case .add:
+            context.insert(Category (name: name))
+        case .edit(let category):
+            print("update category (name \(name))")
+            category.name = name
+            // FIXME: necessary to context.save()?
         }
+        dismiss()
     }
 }

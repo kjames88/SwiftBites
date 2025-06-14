@@ -117,7 +117,7 @@ struct IngredientsView: View {
     private func title(for ingredient: Ingredient) -> some View {
         Text(ingredient.name)
             .font(.title3)
-            .foregroundColor(ingredient.isInPantry ? .primary : .red)
+            .foregroundColor(ingredient.isInPantry ? .primary : .gray)
         
     }
     

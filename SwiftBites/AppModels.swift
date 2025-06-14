@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Ingredient: Identifiable {
+final class Ingredient: Identifiable {
     var id: UUID
     @Attribute(.unique) var name: String
     var isInPantry: Bool = false
@@ -22,7 +22,7 @@ class Ingredient: Identifiable {
 }
 
 @Model
-class RecipeIngredient: Identifiable {
+final class RecipeIngredient: Identifiable {
     var id: UUID
     var ingredient: Ingredient
     var quantity: String
@@ -35,7 +35,7 @@ class RecipeIngredient: Identifiable {
 }
 
 @Model
-class Recipe: Identifiable {
+final class Recipe: Identifiable {
     var id: UUID
     @Attribute(.unique) var name: String
     var summary: String
@@ -72,7 +72,7 @@ class Recipe: Identifiable {
 }
 
 @Model
-class Category: Identifiable {
+final class Category: Identifiable {
     var id: UUID
     @Attribute(.unique) var name: String
     

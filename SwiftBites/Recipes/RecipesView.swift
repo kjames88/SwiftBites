@@ -55,7 +55,7 @@ struct RecipesView: View {
             .pickerStyle(.inline)
         }
     }
-    
+      
     @ViewBuilder
     private var content: some View {
         if recipes.isEmpty {

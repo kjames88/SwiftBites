@@ -19,10 +19,6 @@ struct ContentView: View {
                 .tabItem {
                     Label("Ingredients", systemImage: "carrot")
                 }
-            ShoppingView()
-                .tabItem {
-                    Label("Shopping List", systemImage: "cart")
-                }
         }
         .onAppear {
         }
