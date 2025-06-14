@@ -23,7 +23,7 @@ struct CategoryForm: View {
   private let title: String
   @State private var name: String
   @State private var error: Error?
-  @Environment(\.storage) private var storage
+  //@Environment(\.storage) private var storage
   @Environment(\.dismiss) private var dismiss
   @FocusState private var isNameFocused: Bool
     

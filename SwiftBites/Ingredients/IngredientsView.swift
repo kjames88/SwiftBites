@@ -10,10 +10,11 @@ struct IngredientsView: View {
     self.selection = selection
   }
 
-  @Environment(\.storage) private var storage
+  //@Environment(\.storage) private var storage
   @Environment(\.dismiss) private var dismiss
   @State private var query = ""
     @Query private var ingredients: [Ingredient]
+    @Environment(\.modelContext) var context
 
   // MARK: - Body
 
@@ -22,7 +23,7 @@ struct IngredientsView: View {
       content
         .navigationTitle("Ingredients")
         .toolbar {
-          if !storage.ingredients.isEmpty {
+          if !ingredients.isEmpty {
             NavigationLink(value: IngredientForm.Mode.add) {
               Label("Add", systemImage: "plus")
             }
@@ -115,13 +116,16 @@ struct IngredientsView: View {
   }
 
   private func title(for ingredient: Ingredient) -> some View {
-    Text(ingredient.name)
-      .font(.title3)
+      Text(ingredient.name)
+          .font(.title3)
+          .foregroundColor(ingredient.isInPantry ? .primary : .red)
+          
   }
 
   // MARK: - Data
 
   private func delete(ingredient: Ingredient) {
-    storage.deleteIngredient(id: ingredient.id)
+    //storage.deleteIngredient(id: ingredient.id)
+      context.delete(ingredient)
   }
 }

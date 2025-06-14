@@ -12,10 +12,12 @@ import SwiftData
 class Ingredient: Identifiable {
     var id: UUID
     @Attribute(.unique) var name: String
+    var isInPantry: Bool = false
     
-    init(id: UUID = UUID(), name: String) {
+    init(id: UUID = UUID(), name: String, isInPantry: Bool = false) {
         self.id = id
         self.name = name
+        self.isInPantry = isInPantry
     }
 }
 

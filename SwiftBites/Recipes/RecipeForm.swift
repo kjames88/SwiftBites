@@ -155,10 +155,13 @@ struct RecipeForm: View {
 
   @ViewBuilder
   private var categorySection: some View {
+      let descriptor = FetchDescriptor<Category>()
+      let fetched = try? context.fetch(descriptor)
+      let categories: [Category] = fetched ?? []
     Section {
       Picker("Category", selection: $categoryId) {
         Text("None").tag(nil as Category.ID?)
-        ForEach(storage.categories) { category in
+        ForEach(categories) { category in
           Text(category.name).tag(category.id as Category.ID?)
         }
       }
