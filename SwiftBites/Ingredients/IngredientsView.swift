@@ -96,7 +96,7 @@ struct IngredientsView: View {
                                 do {
                                     try delete(ingredient: ingredient)
                                 } catch {
-                                    print("caught error \(error)")
+                                    //print("caught error \(error)")
                                     self.error = error
                                 }
                             }
