@@ -19,6 +19,23 @@ final class Ingredient: Identifiable {
         self.name = name
         self.isInPantry = isInPantry
     }
+
+    func deleteIngredient(context: ModelContext) throws {
+        var deny: Bool = false
+        let descriptor = FetchDescriptor<RecipeIngredient>()
+        if let recipeIngredients: [RecipeIngredient] = try? context.fetch(descriptor) {
+            for recipeIngredient in recipeIngredients {
+                if recipeIngredient.ingredient === self {
+                    deny = true
+                }
+            }
+        }
+
+        if deny {
+            throw NSError(domain: "name.kevinjames", code: 1001, userInfo: [NSLocalizedDescriptionKey : "Cannot delete an ingredient that is used in a recipe."])
+        }
+        context.delete(self)
+    }
 }
 
 @Model

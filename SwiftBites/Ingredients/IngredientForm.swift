@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct IngredientForm: View {
     enum Mode: Hashable {
@@ -42,13 +43,18 @@ struct IngredientForm: View {
                 Button(
                     role: .destructive,
                     action: {
-                        delete(ingredient: ingredient)
+                        do {
+                            try delete(ingredient: ingredient)
+                        } catch {
+                            self.error = error
+                        }
                     },
                     label: {
                         Text("Delete Ingredient")
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                 )
+                .alert(error: $error)
             }
         }
         .onAppear {
@@ -69,8 +75,12 @@ struct IngredientForm: View {
     
     // MARK: - Data
     
-    private func delete(ingredient: Ingredient) {
-        context.delete(ingredient)
+    private func delete(ingredient: Ingredient) throws {
+        do {
+            try ingredient.deleteIngredient(context: context)
+        } catch {
+            throw error
+        }
         dismiss()
     }
     

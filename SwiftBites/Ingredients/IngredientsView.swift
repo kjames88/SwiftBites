@@ -14,6 +14,7 @@ struct IngredientsView: View {
     @State private var query = ""
     @Query private var ingredients: [Ingredient]
     @Environment(\.modelContext) var context
+    @State private var error: Error?
     
     // MARK: - Body
     
@@ -92,7 +93,12 @@ struct IngredientsView: View {
                     row(for: ingredient)
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button("Delete", systemImage: "trash", role: .destructive) {
-                                delete(ingredient: ingredient)
+                                do {
+                                    try delete(ingredient: ingredient)
+                                } catch {
+                                    print("caught error \(error)")
+                                    self.error = error
+                                }
                             }
                         }
                 }
@@ -100,8 +106,9 @@ struct IngredientsView: View {
         }
         .searchable(text: $query)
         .listStyle(.plain)
+        .alert(error: $error)
     }
-    
+
     @ViewBuilder
     private func row(for ingredient: Ingredient) -> some View {
         if let selection {
@@ -130,7 +137,11 @@ struct IngredientsView: View {
     
     // MARK: - Data
     
-    private func delete(ingredient: Ingredient) {
-        context.delete(ingredient)
+    private func delete(ingredient: Ingredient) throws {
+        do {
+            try ingredient.deleteIngredient(context: context)
+        } catch {
+            throw error
+        }
     }
 }
